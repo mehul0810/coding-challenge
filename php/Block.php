@@ -69,7 +69,7 @@ class Block {
 		$class_name = $attributes['className'];
 		ob_start();
 		?>
-        <div class="<?php echo $class_name; ?>">
+        <div class="<?php echo esc_attr( $class_name ); ?>">
 			<h2><?php esc_html_e( 'Post Counts', 'site-counts' ); ?></h2>
 			<ul>
 			<?php
@@ -90,8 +90,8 @@ class Block {
 					echo sprintf(
 						'%1$s %2$d %3$s',
 						esc_html__( 'There are', 'site-counts' ),
-						$post_count,
-						$post_type_object->labels->name
+						absint( $post_count ),
+						esc_html( $post_type_object->labels->name )
 					);
 					?>
 				</li>
@@ -102,7 +102,7 @@ class Block {
 				echo sprintf(
 					'%1$s %2$d.',
 					esc_html__( 'The current post ID is', 'site-counts' ),
-					$post->ID
+					absint( $post->ID )
 				);
 				?>
 			</p>
@@ -136,7 +136,7 @@ class Block {
                 <?php
                  foreach ( array_slice( $query->posts, 0, 5 ) as $post ) :
                     ?>
-					<li><?php echo $post->post_title ?></li>
+					<li><?php echo esc_html( $post->post_title ); ?></li>
 					<?php
 				endforeach;
 			endif;
