@@ -63,6 +63,8 @@ class Block {
 	 * @return string The markup of the block.
 	 */
 	public function render_callback( $attributes, $content, $block ) {
+		global $post;
+
 		$post_types = get_post_types(  [ 'public' => true ] );
 		$class_name = $attributes['className'];
 		ob_start();
@@ -100,7 +102,7 @@ class Block {
 				echo sprintf(
 					'%1$s %2$d.',
 					esc_html__( 'The current post ID is', 'site-counts' ),
-					$_GET['post_id']
+					$post->ID
 				);
 				?>
 			</p>
