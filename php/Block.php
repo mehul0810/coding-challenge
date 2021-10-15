@@ -123,21 +123,27 @@ class Block {
 				<h2><?php esc_html_e( 'Any 5 posts with the tag of foo and the category of baz', 'site-counts' ); ?></h2>
 				<ul>
 				<?php
-				foreach ( array_slice( $site_count_query->posts, 0, 5 ) as $post ) :
+				foreach ( array_slice( $site_count_query->posts, 0, 5 ) as $post_item ) :
 					// Filter out the posts to exclude.
-					if ( in_array( $post->ID, $posts_to_exclude ) ) {
+					if ( in_array( $post_item->ID, $posts_to_exclude ) ) {
 						continue;
 					}
 
+					// Get categories and tags of this post and prepare it.
+					$tags_array       = get_the_tags( $post_item->ID );
+					$categories_array = get_the_category( $post_item->ID );
+					$tags             = is_array( $tags_array ) ? wp_list_pluck( $tags_array, 'slug' ) : [];
+					$categories       = is_array( $categories_array ) ? wp_list_pluck( $categories_array, 'slug' ) : [];
+
 					// Filter out the posts not having category name `baz` or tag name `foo`.
 					if (
-						! in_array( 'baz', wp_list_pluck( get_the_category( $post->ID ), 'slug' ) , true ) ||
-						! in_array( 'foo', wp_list_pluck( get_the_tags( $post->ID ), 'slug' ) , true )
+						! in_array( 'baz', $categories, true ) ||
+						! in_array( 'foo', $tags, true )
 					) {
 						continue;
 					}
 					?>
-					<li><?php echo esc_html( $post->post_title ); ?></li>
+					<li><?php echo esc_html( $post_item->post_title ); ?></li>
 					<?php
 				endforeach;
 			endif;
